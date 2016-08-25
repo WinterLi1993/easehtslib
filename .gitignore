@@ -1,0 +1,5 @@
+build/
+.idea/
+data/
+src/src.exvim
+src/.exvim.src/
