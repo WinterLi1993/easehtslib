@@ -42,6 +42,20 @@ class SAMSequenceDictionary {
     return false;
   }
 
+  size_t Size() const {
+    return sequences_.size();
+  }
+
+  SAMSequenceRecord& operator[](size_t idx) {
+    return sequences_[idx];
+  }
+
+  SAMSequenceRecord& At(size_t idx) {
+    CHECK_LT(idx, sequences_.size());
+
+    return sequences_[idx];
+  }
+
  private:
   std::vector<SAMSequenceRecord> sequences_;
   // sequence name -> SAMSequenceRecord index

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <boost/lexical_cast.hpp>
 
 #include "glog/logging.h"
 
@@ -23,14 +24,16 @@ int sam_read() {
     ncic::easehts::SAMTextReader reader(in);
     ncic::easehts::SAMFileHeaderPtr header = reader.GetFileHeader();
 
-    const std::string name = header->GetSequenceDictionary()->GetSequence("XX").getSeqenceName();
+    const std::string name = header->GetSequenceDictionary()->GetSequence("xx").getSeqenceName();
     cout << name;
 }
 
 int main(int argc, char **argv) {
     google::InitGoogleLogging(argv[0]);
+    cout << boost::lexical_cast<int>("22");
     cout << "shit" << endl;
     sam_read();
     google::ShutdownGoogleLogging();
+
     return 0;
 }

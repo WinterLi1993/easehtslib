@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <string>
+#include <boost/make_shared.hpp>
 
 namespace ncic {
 
@@ -21,6 +22,9 @@ namespace easehts {
  */
 class SAMFileHeader {
  public:
+  SAMFileHeader() {
+    sequence_dictionary_ = boost::make_shared<SAMSequenceDictionary>();
+  }
   void SetSequenceDictionary(SAMSequenceDictionaryPtr& sequence_dictionary) {
     sequence_dictionary_ = sequence_dictionary;
   }

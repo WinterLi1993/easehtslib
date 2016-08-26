@@ -12,12 +12,13 @@
 #include <string>
 #include <map>
 #include <htslib/sam.h>
+#include <boost/core/noncopyable.hpp>
 
 namespace ncic {
 
 namespace easehts {
 
-class SAMTextReader {
+class SAMTextReader : boost::noncopyable {
  public:
   // Prepare to read a SAM text file.
   SAMTextReader(samFile* fp) : fp_(fp) {

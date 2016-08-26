@@ -13,6 +13,7 @@ add_executable(main main.cpp)
 link_directories(${LIBRARY_OUTPUT_PATH})
 target_link_libraries(main easehtslib)
 
+
 if (test)
     link_libraries(gtest gtest_main)
 
@@ -21,5 +22,11 @@ if (test)
     create_test(main_unittest)
 
     add_executable(reader_unittest reader_unittest.cpp)
+    target_link_libraries(reader_unittest easehtslib)
     create_test(reader_unittest)
+
+    add_executable(sam_text_read_unittest sam_text_read_unittest.cpp)
+    target_link_libraries(sam_text_read_unittest easehtslib)
+    create_test(sam_text_read_unittest)
+    
 endif()

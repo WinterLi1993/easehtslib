@@ -15,7 +15,7 @@ namespace ncic {
 
 namespace easehts {
 
-std::map<std::string, HeaderRecordType> SAMTextHeaderCodec::ParsedHeaderLine::HEADER_TYPE_MAP =
+const std::map<std::string, HeaderRecordType> SAMTextHeaderCodec::ParsedHeaderLine::HEADER_TYPE_MAP =
     SAMTextHeaderCodec::ParsedHeaderLine::InitHeaderTypeMap();
 
 const std::string SAMTextHeaderCodec::FIELD_SEPARATOR = "\t";
@@ -35,6 +35,7 @@ SAMFileHeaderPtr SAMTextHeaderCodec::Parse(htsFile *fp) {
         break;
     }
   }
+  return sam_header;
 }
 
 /**
@@ -48,8 +49,8 @@ void SAMTextHeaderCodec::ParseSQLine(const SAMFileHeaderPtr& sam_header,
   LOG_IF(ERROR, !parsed_header_line->HasKey("SN") ||
       !parsed_header_line->HasKey("LN")) << "SQ line don't have SN or LN attribute";
 
-  const std::string& seq_name = parsed_header_line->GetValue("SN");
-  const std::string& len_str = parsed_header_line->GetValue("LN");
+  const std::string seq_name = parsed_header_line->GetValue("SN");
+  const std::string len_str = parsed_header_line->GetValue("LN");
   // remove the attributes
   parsed_header_line->RemoveKey("SN");
   parsed_header_line->RemoveKey("LN");
@@ -99,10 +100,12 @@ SAMTextHeaderCodec::ParsedHeaderLine::ParsedHeaderLine(const std::string &line) 
     std::vector<std::string> pair;
     boost::split(pair, fields[idx], boost::is_any_of(TAG_KEY_VALUE_SEPARATOR));
 
-    CHECK_LT(pair.size(), 2) << "Bad header format";
+    if (pair.size() < 2) {
+      continue;
+    }
 
     // FIXME here if the filed has more than one TAG_KEY_VALUE_SEPARATOR_CHA such as k:v1:v2, we just store k->v1
-    key_value_pairs_[fields[0]] = fields[1];
+    key_value_pairs_[pair[0]] = pair[1];
   }
 }
 
@@ -113,7 +116,7 @@ void SAMTextHeaderCodec::ParsedHeaderLine::ParseHeaderType(const std::string& ty
   assert(type[0] == HEADER_LINE_START);
 
   if (HEADER_TYPE_MAP.find(type) != HEADER_TYPE_MAP.end()) {
-    header_type_ = HEADER_TYPE_MAP[type];
+    header_type_ = HEADER_TYPE_MAP.at(type);
   } else {
     header_type_ = NUL;
   }

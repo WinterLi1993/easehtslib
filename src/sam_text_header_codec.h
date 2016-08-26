@@ -84,7 +84,7 @@ class SAMTextHeaderCodec {
     void ParseHeaderType(const std::string& type);
 
    private:
-    static std::map<std::string, HeaderRecordType> HEADER_TYPE_MAP;
+    const static std::map<std::string, HeaderRecordType> HEADER_TYPE_MAP;
 
     // Store the line attributes
     std::map<std::string, std::string> key_value_pairs_;
