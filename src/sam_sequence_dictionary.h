@@ -9,8 +9,8 @@
 
 #include <vector>
 #include <map>
-#include <boost/shared_ptr.hpp>
 #include <glog/logging.h>
+#include <memory>
 
 namespace ncic {
 
@@ -24,7 +24,7 @@ class SAMSequenceDictionary {
  public:
   void AddSequenceRecord(const SAMSequenceRecord& sequence_record) {
     sequences_.push_back(sequence_record);
-    sequences_map_[sequence_record.getSeqenceName()] = sequences_.size() - 1;
+    sequences_map_[sequence_record.getSeqenceName()] = static_cast<int32_t>(sequences_.size()) - 1;
   }
 
   // XXX you should first decide if hasSequence
@@ -59,10 +59,10 @@ class SAMSequenceDictionary {
  private:
   std::vector<SAMSequenceRecord> sequences_;
   // sequence name -> SAMSequenceRecord index
-  std::map<std::string, int> sequences_map_;
+  std::map<std::string, int32_t> sequences_map_;
 };
 
-typedef boost::shared_ptr<SAMSequenceDictionary> SAMSequenceDictionaryPtr;
+typedef std::shared_ptr<SAMSequenceDictionary> SAMSequenceDictionaryPtr;
 
 } // easehts
 } // ncic

@@ -8,10 +8,10 @@
 #include "sam_sequence_dictionary.h"
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <map>
 #include <string>
-#include <boost/make_shared.hpp>
+#include <htslib/sam.h>
 
 namespace ncic {
 
@@ -23,7 +23,7 @@ namespace easehts {
 class SAMFileHeader {
  public:
   SAMFileHeader() {
-    sequence_dictionary_ = boost::make_shared<SAMSequenceDictionary>();
+    sequence_dictionary_ = std::make_shared<SAMSequenceDictionary>();
   }
   void SetSequenceDictionary(SAMSequenceDictionaryPtr& sequence_dictionary) {
     sequence_dictionary_ = sequence_dictionary;
@@ -40,9 +40,10 @@ class SAMFileHeader {
  private:
   SAMSequenceDictionaryPtr sequence_dictionary_;
   std::map<std::string, std::string> attributes_;
+
 };
 
-typedef boost::shared_ptr<SAMFileHeader> SAMFileHeaderPtr;
+typedef std::shared_ptr<SAMFileHeader> SAMFileHeaderPtr;
 
 } // easehts
 } // ncic

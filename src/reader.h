@@ -6,6 +6,8 @@
 #define EASEHTSLIB_READER_H
 
 #include "utils.h"
+#include "sam_bam_record.h"
+#include "sam_bam_header.h"
 
 #include <string>
 
@@ -13,10 +15,18 @@ namespace ncic {
 
 namespace easehts {
 
-// The base class of sam/bam file
-class SamReader {
+// The base class of sam/bam reader file
+class AbstractReader {
  public:
- private:
+  AbstractReader(samFile* fp): fp_(fp), header_(fp){
+
+  }
+
+  virtual bool HasNext(SAMBAMRecord* record) = 0;
+
+ protected:
+  samFile* fp_;
+  SAMBAMHeader header_;
 };
 
 typedef struct FileType {

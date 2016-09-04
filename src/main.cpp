@@ -2,7 +2,7 @@
 
 #include "htslib/sam.h"
 
-#include <string.h>
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 #include <boost/lexical_cast.hpp>
@@ -21,16 +21,15 @@ int sam_read() {
         return EXIT_FAILURE;
     }
 
-    ncic::easehts::SAMTextReader reader(in);
-    ncic::easehts::SAMFileHeaderPtr header = reader.GetFileHeader();
+    ncic::easehts::SAMBAMNormalReader reader(in);
 
-    const std::string name = header->GetSequenceDictionary()->GetSequence("xx").getSeqenceName();
-    cout << name;
+
+    return EXIT_SUCCESS;
 }
 
 int main(int argc, char **argv) {
     google::InitGoogleLogging(argv[0]);
-    cout << boost::lexical_cast<int>("22");
+    cout << stoi("22");
     cout << "shit" << endl;
     sam_read();
     google::ShutdownGoogleLogging();

@@ -12,12 +12,9 @@ set(CXX_FLAGS
         -Wall
         -Wextra
         -Werror
-        -Wconversion
         -Wno-unused-parameter
-        -Wold-style-cast
         -Woverloaded-virtual
         -Wpointer-arith
-        -Wshadow
         -Wwrite-strings
         -march=native
         # -MMD
@@ -28,21 +25,22 @@ set(CXX_FLAGS
 # Options. Turn on with 'cmake -Dmyvarname=ON'.
 option(test "Build all tests." OFF) # Makes boolean 'test' available.
 
-#set(CMAKE_CXX_FLAGS_DEBUG "-O0")
-#set(CMAKE_CXX_FLAGS_RELEASE "-O2 -finline-limit=1000 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -finline-limit=1000 -DNDEBUG")
+string(REPLACE ";" " " CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-set(BOOST_ROOT "/home/zp/tools/boost/")
-find_package(Boost REQUIRED)
+#set(BOOST_ROOT "/home/zp/tools/boost/")
+#find_package(Boost REQUIRED)
 find_package(ZLIB)
 
 set(HTS_LIB "/home/zp/work/rnaSeq/htslib/")
 set(GLOG_ROOT "/home/zp/tools/glog/install/")
 set(GFLAGS_ROOT "/home/zp/tools/gflags/install/")
 
-include_directories(${Boost_INCLUDE_DIRS})
+#include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${HTS_LIB})
 include_directories(${GLOG_ROOT}/include/)
 include_directories(${GFLAGS_ROOT}/include/)
@@ -53,7 +51,7 @@ link_directories(
 )
 
 link_libraries(
-        ${Boost_LIBRARIES}
+        #${Boost_LIBRARIES}
         pthread
         z
         unwind

@@ -1,9 +1,14 @@
 set(SOURCE_FILES
+    utils.cpp
     sam_file_header.cpp
     sam_text_header_codec.cpp
     sam_seqence_record.cpp
-    sam_text_reader.cpp
+    sam_bam_normal_reader.cpp
     reader.cpp
+    sam_bam_header.cpp
+    sam_bam_record.cpp
+    bam_index_reader.cpp
+    bam_index.cpp
 )
 
 add_library(easehtslib ${SOURCE_FILES})
@@ -25,8 +30,8 @@ if (test)
     target_link_libraries(reader_unittest easehtslib)
     create_test(reader_unittest)
 
-    add_executable(sam_text_read_unittest sam_text_read_unittest.cpp)
-    target_link_libraries(sam_text_read_unittest easehtslib)
-    create_test(sam_text_read_unittest)
+    add_executable(sam_bam_read_unittest sam_bam_read_unittest.cpp)
+    target_link_libraries(sam_bam_read_unittest easehtslib)
+    create_test(sam_bam_read_unittest)
     
 endif()

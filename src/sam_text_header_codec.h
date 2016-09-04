@@ -10,7 +10,6 @@
 #include <string>
 
 #include <htslib/sam.h>
-#include <boost/shared_ptr.hpp>
 #include <map>
 #include <glog/logging.h>
 

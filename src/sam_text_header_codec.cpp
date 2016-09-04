@@ -3,11 +3,10 @@
 //
 
 #include "sam_text_header_codec.h"
+#include "utils.h"
 
-#include <boost/make_shared.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/tokenizer.hpp>
+#include <memory>
+#include <assert.h>
 
 #include <htslib/kseq.h>
 
@@ -22,7 +21,7 @@ const std::string SAMTextHeaderCodec::FIELD_SEPARATOR = "\t";
 const std::string SAMTextHeaderCodec::TAG_KEY_VALUE_SEPARATOR = ":";
 
 SAMFileHeaderPtr SAMTextHeaderCodec::Parse(htsFile *fp) {
-  SAMFileHeaderPtr sam_header = boost::make_shared<SAMFileHeader>();
+  SAMFileHeaderPtr sam_header = std::make_shared<SAMFileHeader>();
   std::string line;
   while (AdvanceLine(fp, &line)) {
     ParsedHeaderLine parsed_header_line(line);
@@ -56,12 +55,7 @@ void SAMTextHeaderCodec::ParseSQLine(const SAMFileHeaderPtr& sam_header,
   parsed_header_line->RemoveKey("LN");
 
 
-  int len = 0;
-  try {
-    len = boost::lexical_cast<int>(len_str);
-  } catch (boost::bad_lexical_cast) {
-    LOG(ERROR) << "LN field is not a valid int number" << len_str;
-  }
+  int len = std::stoi(len_str);
   sam_header->GetSequenceDictionary()->AddSequenceRecord(SAMSequenceRecord(seq_name, len));
 
   sam_header->AddAttributes(parsed_header_line->GetKeyValuePairs());
@@ -86,19 +80,20 @@ bool SAMTextHeaderCodec::AdvanceLine(htsFile *fp, std::string* line) {
     *line = std::string(fp->line.s, fp->line.l);
     return true;
   }
+  return false;
 }
 
 SAMTextHeaderCodec::ParsedHeaderLine::ParsedHeaderLine(const std::string &line) {
   std::vector<std::string> fields;
 
-  boost::split(fields, line, boost::is_any_of(FIELD_SEPARATOR));
-  CHECK_GT(fields.size(), 1);
+  utils::tokenize(line, FIELD_SEPARATOR_CHAR, &fields);
+  CHECK_GT(fields.size(), static_cast<size_t>(1));
 
   ParseHeaderType(fields[0]);
 
   for (size_t idx = 1; idx < fields.size(); ++idx) {
     std::vector<std::string> pair;
-    boost::split(pair, fields[idx], boost::is_any_of(TAG_KEY_VALUE_SEPARATOR));
+    utils::tokenize(fields[idx], TAG_KEY_VALUE_SEPARATOR_CHAR, &pair);
 
     if (pair.size() < 2) {
       continue;
